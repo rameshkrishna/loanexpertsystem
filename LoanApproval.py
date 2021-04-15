@@ -61,7 +61,32 @@ class LoanApplication(KnowledgeEngine):
     def start_application(self):
         self.declare(Loan(bankR=input("Do you have any bankrupties in past? Yes or No\n").lower()))
         self.declare(Loan(LatePayments=input("Do you have any Late Payments?\n")))
-            
+
+
+
+
+    #rule if there are no latepayments
+    @Rule(Loan(action='precheck'),Loan(preChecks='done'),Loan(LatePayments='no'),Loan(bankR='no'))
+    def latePayments(self):
+        print(LoanMessages.accept)
+
+    #rule if there are no latepayments
+    @Rule(Loan(action='precheck'),Loan(preChecks='done'),Loan(bankR='yes'))
+    def bankrupties(self):
+        typeofbankrupties = int(input("What type of bankruptcies?1)Chapter7 2)Chapter 13\nSelect number \n "))
+        self.declare(Loan(typeofbankrupties=typeofbankrupties))
+
+    #rule if there bankrupties and chapter 7
+    @Rule(Loan(action='precheck'),Loan(preChecks='done'),Loan(typeofbankrupties=1))
+    def bankrupties_chapter7(self):
+        print(LoanMessages.accept)
+    
+    #rule if there bankrupties and chapter 13
+    @Rule(Loan(action='precheck'),Loan(preChecks='done'),Loan(typeofbankrupties=2))
+    def bankrupties_chapter13(self):
+        print(LoanMessages.accept)
+    
+
 
     #rule to invoke if there are Late Payments
     @Rule(Loan(action='precheck'),Loan(preChecks='done'),Loan(LatePayments='yes'))
@@ -74,10 +99,11 @@ class LoanApplication(KnowledgeEngine):
         else:
             print("Choose Correction Option")
 
-    #rule to invoke if there are Late Payments less than 4 and latepay days 30-60
+    #rule to invoke if there are Late Payments less than 4 and latepay days 30-60 and no bankrupties
     @Rule(AND(Loan(action='precheck'),Loan(preChecks='done'),
     Loan(latepayDays=1),
-    Loan(howmanytimes=P(lambda howmanytimes: howmanytimes < 5))
+    Loan(howmanytimes=P(lambda howmanytimes: howmanytimes < 5)),
+    Loan(bankR='no')
     ))
     def latepayment_less_than_4(self):
         reason = input("What's the reason for latepayments?\nfamily\naccidents\nhealth\n").lower()
@@ -96,6 +122,7 @@ class LoanApplication(KnowledgeEngine):
     #rule to invoke if there are Late Payments less than 4 and latepay days 60-90
     @Rule(AND(Loan(action='precheck'),Loan(preChecks='done'),
     Loan(latepayDays=2),
+    Loan(bankR='no'),
     Loan(howmanytimes=P(lambda howmanytimes: howmanytimes < 2))
     ))
     def latepayment_less_than_2(self):
