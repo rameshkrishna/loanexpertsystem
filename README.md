@@ -1,4 +1,4 @@
-# loanexpertsystem
+# Loan Expert System
 ## Sample Loan Expert System implemented in Python with Experta | pyKnow
 
 
