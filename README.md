@@ -15,6 +15,6 @@ python LoanApproval.py
 ```
 The following rules are implemented in python
 
-![expert system](https://user-images.githubusercontent.com/6829736/114802281-6ebeed80-9d6b-11eb-8c84-af36393fe480.png)
+![Untitled Diagram](https://user-images.githubusercontent.com/6829736/114813898-0aa72400-9d81-11eb-9c0b-8b224e8deb0c.jpg)
 
-Source: https://github.com/vitekign/Mortgage
+
